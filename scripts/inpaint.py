@@ -16,6 +16,8 @@ from pathlib import Path
 from ldm.models.diffusion.ddim import DDIMSampler
 from ldm.util import instantiate_from_config
 
+global sampler
+
 class Monochrome(Base):
     def __init__(
         self,
@@ -114,6 +116,28 @@ def initialize_model(config, ckpt):
     sampler = DDIMSampler(model)
 
     return sampler
+
+def re_initialize_model(radio):
+
+    # if radio == "SDv2":
+    #     c = "configs/stable-diffusion/v2-inpainting-inference.yaml"
+    #     m = "512-inpainting-ema.ckpt"
+
+    # else:
+    #     c = "configs/stable-diffusion/v1-inpainting-inference.yaml"
+    #     m = "sd-v1-5-inpainting.ckpt"
+
+    # config = OmegaConf.load(c)
+    # model = instantiate_from_config(m)
+
+    # model.load_state_dict(torch.load(ckpt)["state_dict"], strict=False)
+
+    # device = torch.device(
+    #     "cuda") if torch.cuda.is_available() else torch.device("cpu")
+    # model = model.to(device)
+    # sampler = DDIMSampler(model)
+
+    return None
 
 mono = Monochrome()
 torch.set_grad_enabled(False)
@@ -219,16 +243,16 @@ def pred(img, prompt, ddim_steps, num_samples, scale, seed, limit, radio):
         _img = _img.resize((1024, 1024), Image.NEAREST)
         _mask = _mask.resize((1024, 1024), Image.NEAREST)
         
-
     image = pad_image(_img) # resize to integer multiple of 32
     mask = pad_image(_mask) # resize to integer multiple of 32
     width, height = image.size
     print("Inpainting...", width, height)
 
-    if radio == "Free-flow":
-        prompt += "nothing, fill, background, "
+    if radio == "Erase":
+        prompt += ", nothing, fill, background, photorealistic, 8k, best quality, high-resolution"
+    else:
+        prompt += ", photorealistic, 8k, best quality, high-resolution"
 
-    prompt += "photorealistic, 8k, best quality, high-resolution"
     print("Prompt is:",prompt)
 
     result = inpaint(
@@ -260,6 +284,7 @@ with gr.Blocks(theme = mono,css=css) as demo:
                 num_samples = gr.Slider(label="Output Images", minimum=1, maximum=4, step=1)
                 limit = gr.Dropdown(["Constrained (512x512)","No Limits"], label="Image Size", info="Constrain Output Size?", value="No Limits")
                 radio = gr.Radio(["Free-flow", "Erase"], label="Mode", info="Select customization mode!", value="Free-flow")
+                model_checkpoint = gr.Radio(["SDv2", "SDv1.5"], label="Checkpoint", info="Select SD Checkpoint", value="SDv2")
                 ddim_steps = gr.Slider(label="DDIM Steps", minimum=1, maximum=50, value=45, step=1)
                 scale = gr.Slider(label="Guidance Scale", minimum=0.1, maximum=30.0, value=10, step=0.1)
                 seed = gr.Slider(label="Seed (Randomize)", minimum=0,maximum=2147483647, step=1, randomize = True)
@@ -270,5 +295,6 @@ with gr.Blocks(theme = mono,css=css) as demo:
         gr.Examples(inputs=img, examples=[os.path.join(os.path.dirname(__file__),"1_rml.jpg"),os.path.join(os.path.dirname(__file__),"2_rml.jpg"),os.path.join(os.path.dirname(__file__),"3_rml.jpg"),os.path.join(os.path.dirname(__file__),"4_rml.jpg")])
             
     run.click(fn=pred, inputs=[img, prompt, ddim_steps, num_samples, scale, seed, limit, radio],outputs=[gallery])
+    model_checkpoint.change(fn=re_initialize_model,inputs=model_checkpoint,outputs=None)
 
 demo.launch(share=True)
