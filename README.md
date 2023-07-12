@@ -45,17 +45,17 @@ sh run.sh v1
 ## Some sample outputs
 
 <div align="center">
-    <img src="samples/6_out.PNG" alt="Image 2" width="350" height="350">
-    <img src="samples/7.png" alt="Image 3" width="350" height="350">
-    <img src="samples/8_out.PNG" alt="Image 4" width="350" height="350">
-    <img src="samples/9_out.PNG" alt="Image 4" width="350" height="350">
-    <img src="samples/10_out.PNG" alt="Image 4" width="350" height="350">
-    <img src="samples/11_out.PNG" alt="Image 4" width="350" height="350">
+    <img src="samples/6_out.PNG" alt="Image 2" width="500" height="500">
+    <img src="samples/7.png" alt="Image 3" width="500" height="500">
+    <img src="samples/8_out.PNG" alt="Image 4" width="500" height="500">
+    <img src="samples/9_out.PNG" alt="Image 4" width="500" height="500">
+    <img src="samples/10_out.PNG" alt="Image 4" width="500" height="500">
+    <img src="samples/11_out.PNG" alt="Image 4" width="500" height="500">
 </div>
 
 ## UI
 
-![Sample Output](./samples/5.PNG)
+<img src="samples/5.PNG" alt="Image 4" width="500" height="500">
 
 
 ## Gradio Demo guide
@@ -74,7 +74,7 @@ sh run.sh v1
 * Checkpoint: Select your desired Stable Diffusion Checkpoint - 2 or 1.5
 * Seed: Random-seed coressponding to the noisy vector generated. Think of it like a seed you can randomize
 * DDIM: Denoising Steps. Higher is better but would would increase the model latency. Keep it above 20 for clean results
-* Guidance: Weight of the guidance used for the prompts while computing cross-attention. Higher weight => Higher constrain based on the input prompt. Lower values give liberty to the model.
+* Guidance: Weight of the guidance used for the prompts while computing cross-attention. Higher weight => Higher constrain based on the input prompt. Lower values give liberty to the model. 
 
 ### Image Generation
 
