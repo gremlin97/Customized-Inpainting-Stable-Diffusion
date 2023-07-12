@@ -1,4 +1,4 @@
-# Rocket Homes Listings Customizer
+# Inpainting using Stable Diffusion Checkpoints
 
 ## How to run me?
 
@@ -19,7 +19,7 @@ Install the following required packages in the environment:
 
 ```
 conda install pytorch==1.12.1 torchvision==0.13.1 -c pytorch
-pip install transformers==4.19.2 diffusers invisible-watermark
+pip install transformers==4.19.2 diffusers
 pip install -e .
 
 ```
@@ -44,7 +44,18 @@ sh run.sh v1
 
 ## Some sample outputs
 
-![Sample Output](./samples/out.png)
+<div align="center">
+    <img src="samples/6_out.PNG" alt="Image 2" width="350" height="350">
+    <img src="samples/7.png" alt="Image 3" width="350" height="350">
+    <img src="samples/8_out.PNG" alt="Image 4" width="350" height="350">
+    <img src="samples/9_out.PNG" alt="Image 4" width="350" height="350">
+    <img src="samples/10_out.PNG" alt="Image 4" width="350" height="350">
+    <img src="samples/11_out.PNG" alt="Image 4" width="350" height="350">
+</div>
+
+## UI
+
+![Sample Output](./samples/5.PNG)
 
 
 ## Gradio Demo guide
@@ -58,12 +69,24 @@ sh run.sh v1
 ### Advanced Customization
 
 * Output Images: Control the number of output variations generated. Keep in mind to mind the load on the GPU
-* Image Size: Incas computation in low you can use the constrained mode to limit size of the images yo 512x512
+* Image Size: Incase computation in low you can use the constrained mode to limit size of the images yo 512x512
 * Mode: Select erase to remove furniture else select free-flow 
 * Checkpoint: Select your desired Stable Diffusion Checkpoint - 2 or 1.5
 * Seed: Random-seed coressponding to the noisy vector generated. Think of it like a seed you can randomize
 * DDIM: Denoising Steps. Higher is better but would would increase the model latency. Keep it above 20 for clean results
 * Guidance: Weight of the guidance used for the prompts while computing cross-attention. Higher weight => Higher constrain based on the input prompt. Lower values give liberty to the model.
+
+### Image Generation
+
+By Experimenting with different SD Checkpoints, you can generate images as well. Just use a white 512x512 or any resolution image for that matter, inpaint the whole image and voila, you can do image generation! Some examples below:
+
+<div align="center">
+    <img src="samples/2.jpeg" alt="Image 1" width="225" height="225">
+    <img src="samples/1.jpeg" alt="Image 2" width="225" height="225">
+    <img src="samples/4.jpeg" alt="Image 3" width="225" height="225">
+    <img src="samples/3.jpeg" alt="Image 4" width="225" height="225">
+</div>
+
 
 ### Contact
 *Kunal Kasodekar*

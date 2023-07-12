@@ -24,7 +24,7 @@ class Monochrome(Base):
         *,
         primary_hue: colors.Color | str = colors.neutral,
         secondary_hue: colors.Color | str = colors.neutral,
-        neutral_hue: colors.Color | str = colors.red,
+        neutral_hue: colors.Color | str = colors.neutral,
         spacing_size: sizes.Size | str = sizes.spacing_lg,
         radius_size: sizes.Size | str = sizes.radius_md,
         text_size: sizes.Size | str = sizes.text_md,
@@ -108,6 +108,7 @@ def initialize_model(config, ckpt):
     config = OmegaConf.load(config)
     model = instantiate_from_config(config.model)
 
+    # model.load_state_dict(torch.load("test.ckpt"), strict=False)
     model.load_state_dict(torch.load(ckpt)["state_dict"], strict=False)
 
     device = torch.device(
@@ -253,7 +254,7 @@ def pred(img, prompt, ddim_steps, num_samples, scale, seed, limit, radio):
     else:
         prompt += ", photorealistic, 8k, best quality, high-resolution"
 
-    print("Prompt is:",prompt)
+    # print("Prompt is:",prompt)
 
     result = inpaint(
         sampler=sampler,
@@ -274,7 +275,7 @@ css = ".gradio-container {background-color: #FFFFFF,primary-hue: #FFFFFF} #accor
 with gr.Blocks(theme = mono,css=css) as demo:
     demo.queue()
     with gr.Row():
-        gr.Markdown('# Customize Rocket Mortgage Listings',elem_id="title")
+        gr.Markdown('# Customize and Inpaint',elem_id="title")
     with gr.Row():
         with gr.Column():
             img = gr.Image(label='Image',source='upload', tool='sketch', type='pil', interactive='True').style(height=340)
